@@ -133,29 +133,29 @@ export default function Home() {
           </a>
         </li>
         <li>
-{/*           <a href="/job-list/job-list-v1"> */}
+          
             <span className="text-sm">Find Jobs</span>
-{/*           </a> */}
+         
         </li>
         <li>
-{/*           <a href="/employers-list/employers-list-v1"> */}
+         
             <span className="text-sm">Employers</span>
-{/*           </a> */}
+        
         </li>
         <li>
-{/*           <a href="/candidates-list/candidates-list-v1"> */}
+          
             <span className="text-sm">Candidates</span>
-{/*           </a> */}
+     
         </li>
         <li>
-{/*           <a href="/blog/blog-list-v1"> */}
+         
             <span className="text-sm">Blog</span>
-{/*           </a> */}
+         
         </li>
         <li>
-{/*           <a href="/about"> */}
+         
             <span className="text-sm">About Us</span>
-{/*           </a> */}
+      
         </li>
       </ul>
     </nav>
@@ -163,10 +163,10 @@ export default function Home() {
   <div className=" hidden xl:flex items-center">
     <div
       className="text-sm text-blue-500 mr-4 md:mr-6"
-{/*       href="/candidates-dashboard/cv-manager" */}
+     
     >
       Upload your CV
-    </a>
+    </div>
     <div className="flex items-center">
       <div className=" text-sm bg-blue-100 text-blue-500 rounded-md px-4 py-2 mr-2 md:mr-4 cursor-pointer" onClick={tooglepopup}>
         Login / Register
