@@ -302,7 +302,7 @@ export default function Home() {
 </>:
 <>
 
-<button disabled = {page===1} className="text-center text-blue-400 cursor-pointer" onClick={()=>setPage((pre)=>pre-1)}>Pervious Page</button>
+{/* <button disabled = {page===1} className="text-center text-blue-400 cursor-pointer" onClick={()=>setPage((pre)=>pre-1)}>Pervious Page</button> */}
 <button className="text-center text-blue-400 cursor-pointer" onClick={()=>setPage((pre)=>pre+1)}>Next Page</button>
 </>}
 </div>
