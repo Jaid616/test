@@ -133,37 +133,37 @@ export default function Home() {
           </a>
         </li>
         <li>
-          <a href="/job-list/job-list-v1">
+{/*           <a href="/job-list/job-list-v1"> */}
             <span className="text-sm">Find Jobs</span>
-          </a>
+{/*           </a> */}
         </li>
         <li>
-          <a href="/employers-list/employers-list-v1">
+{/*           <a href="/employers-list/employers-list-v1"> */}
             <span className="text-sm">Employers</span>
-          </a>
+{/*           </a> */}
         </li>
         <li>
-          <a href="/candidates-list/candidates-list-v1">
+{/*           <a href="/candidates-list/candidates-list-v1"> */}
             <span className="text-sm">Candidates</span>
-          </a>
+{/*           </a> */}
         </li>
         <li>
-          <a href="/blog/blog-list-v1">
+{/*           <a href="/blog/blog-list-v1"> */}
             <span className="text-sm">Blog</span>
-          </a>
+{/*           </a> */}
         </li>
         <li>
-          <a href="/about">
+{/*           <a href="/about"> */}
             <span className="text-sm">About Us</span>
-          </a>
+{/*           </a> */}
         </li>
       </ul>
     </nav>
   </div>
   <div className=" hidden xl:flex items-center">
-    <a
+    <div
       className="text-sm text-blue-500 mr-4 md:mr-6"
-      href="/candidates-dashboard/cv-manager"
+{/*       href="/candidates-dashboard/cv-manager" */}
     >
       Upload your CV
     </a>
