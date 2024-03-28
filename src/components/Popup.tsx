@@ -1,6 +1,7 @@
 'use client'
 import useAutoClose from '@/hooks/useAutoClose';
 import usePost from '@/hooks/usePost';
+import createCookies from '@/lib/setCookies';
 import Image from 'next/image'
 import React, { useState } from 'react'
 import { CiMail } from "react-icons/ci";
@@ -50,31 +51,19 @@ const handleChangeRegister = (e:React.ChangeEvent<HTMLInputElement>) => {
 
 const handleLogin = async(e:any)=> {
     e.preventDefault();
-  let response =  await  PostMethod({
-        method:'post',
-        body: loginData,
-        url : 'api/token/'
-     })
-    if(response?.access)
-    {
-        let login =  await  PostMethod({
+        let response =  await  PostMethod({
             method:'post',
             body: loginData,
-            headers :  { 
-                'Content-Type': 'application/json', 
-                 'Authorization'  : `Bearer  ${response.access}`
-              },
             url : 'login_api/'
          }) 
-
-        
-    }
-     if(response?.status >=400)
-     {
-        alert(response.error)
-     }
-
-     cclosepop()
+       if(response?.status === 200)
+       {
+         createCookies(response?.data?.data.access , "access_token")
+         cclosepop()
+       }
+       else{
+          alert(response?.data.error)
+       }
 }
 
 
@@ -85,14 +74,25 @@ const handleSignup = async(e:any)=> {
         body: regsterData,
         url : 'user_api/'
      })
- 
-     if(response?.status >= 400)
+     console.log(response , "response")
+     if(response?.status ===200 )
      {
-        alert(response.error)
+       
+     }
+     else {
+      let error =''
+      if(response?.data?.message?.username)
+      {
+        error = response?.data?.message?.username[0]
+      }
+      else{
+       error = response?.data.message
+      }
+      alert(error)
      }
 
 
-     cclosepop()
+    //  cclosepop()
 }
 
   return (
@@ -316,7 +316,7 @@ const handleSignup = async(e:any)=> {
                </div>
  
                <div className=' my-5'>
-                 <button type='submit' className='w-full py-3 bg-blue-700 text-center text-white rounded-lg'>Login</button>
+                 <button type='submit' disabled={loading} className='w-full py-3 disabled:bg-blue-300 bg-blue-700 text-center text-white rounded-lg'>Login</button>
                </div>
                <div>
                  <p className=' text-center mb-6 text-xs cursor-pointer' onClick={()=>setStatus(true)}>Don't have an account? Signup</p>

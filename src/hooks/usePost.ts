@@ -22,16 +22,18 @@ const usePost = () => {
             // const response = await axios.post(`${`${process.env.NEXT_PUBLIC_BASE_URL}`}${url}`, body);
             const response = await axios({
                 method,
-                url: `${`https://learnkoodsapi.onrender.com/`}${url}`,
+                url: `${`https://learnkoods-task.onrender.com/`}${url}`,
                 data: body && body,
                 headers : headers && headers
             });
-             return response.data ;
+
+            console.log(response , "axios response")
+             return response ;
        
         } catch (e) {
             const error = e as AxiosError;
      
-            return error?.response?.data;
+            return error?.response
         } finally {
             setLoading(false); // Set loading to false after the request is completed
         }

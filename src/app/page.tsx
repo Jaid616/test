@@ -7,13 +7,16 @@ import { useEffect, useState } from "react";
 import usePost from "@/hooks/usePost";
 import Popup from "@/components/Popup";
 import useAutoClose from "@/hooks/useAutoClose";
+import moment from "moment";
+import Link from "next/link";
+
 
 interface Data {
   results: any[]; 
 }
 
 interface Data {
-  created_at: string; 
+  created: string; 
 }
 
 export default function Home() {
@@ -34,12 +37,12 @@ export default function Home() {
 
 
   const getData = async()=> {
-    const data  =  await  PostMethod({
+    const data:any  =  await  PostMethod({
       method:'get',
-        url: `jobs_api/?page=${page}`})
+        url: `job_api/?page=${page}`})
 
-        setData(prevState => ([...prevState, ...data?.results]));
-        setFilteredData(prevState => ([...prevState, ...data?.results]))
+        setData(prevState => ([...prevState, ...data?.data?.results]));
+        setFilteredData(prevState => ([...prevState, ...data?.data?.results]))
   }
 
     useEffect(()=>{
@@ -56,7 +59,7 @@ export default function Home() {
     };
 
     useEffect(()=>{
-      const filtered = data.filter((item:any) => item.job_title.toLowerCase().includes(keyword.toLowerCase()));
+      const filtered = data.filter((item:any) => item.title.toLowerCase().includes(keyword.toLowerCase()));
       setFilteredData(filtered);
     },[keyword])
 
@@ -67,13 +70,14 @@ export default function Home() {
     // Function to handle filtering based on newest/oldest
     const filterDataByOption = () => {
       const sortedData = [...data];
+       console.log(data , "data", sortedData)
       if (filterOption === 'newest') {
-        sortedData.sort((a: Data, b: Data) => {
-          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        sortedData.sort((a: any, b: any) => {
+          return new Date(b.created).getTime() - new Date(a.created).getTime();
         });
       } else {
         sortedData.sort((a: Data, b: Data) => {
-          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+          return new Date(a.created).getTime() - new Date(b.created).getTime();
         });
       }
       setFilteredData(sortedData);
@@ -256,39 +260,58 @@ export default function Home() {
 
 
   {filteredData.length > 0 ? (
-  filteredData.map((item: any, index: number) => (
-    <div className="my-8 px-4 py-8 rounded-lg border border-blue-100" key={index}>
+  filteredData.map((item: any, index: number) => 
+   
+
+  {
+    
+    let postdata = moment(item?.created, "YYYY-MM-DD").fromNow();
+    let maxsalary = Math.floor(item["max salary"]/1000)
+    let minsalary = Math.floor(item["min salary"]/1000)
+    return (
+      <>
+        <div className="my-8 px-4 py-8 rounded-lg border border-blue-100" key={index}>
       <div className="grid grid-cols-12 gap-x-5">
-        <div className=" col-span-3 md:col-span-2 w-[80px] h-[50px] relative">
-          <Image src={`/mm.webp`} fill alt="name" className="object-contain" />
+        <div className=" col-span-2 md:col-span-2 w-[80px] h-[50px] relative">
+          <Image src={`https://learnkoods-task.onrender.com${item?.image}`} fill alt="name" className="object-contain" />
         </div>
-        <div className=" col-span-9">
-          <h4 className="text-sm md:text-lg font-medium">{item?.job_title}</h4>
+        <div className=" col-span-10">
+          <Link href={item?.url} target="_blank">
+          
+          <h4 className="text-sm md:text-lg font-medium">{item?.title}</h4>
+          </Link>
           <ul className="flex gap-x-4 my-3">
             <li className="flex gap-x-3 items-center text-xs md:text-sm">
               <CiMail size={20} />
-              Segment
+              {item?.company}
             </li>
             <li className="flex gap-x-3 items-center text-xs md:text-sm">
               <CiMail size={20} />
               {item?.location}
             </li>
             <li className=" hidden md:flex gap-x-3 items-center text-sm">
-              <CiMail size={20} /> 11 hours ago
+              <CiMail size={20} /> {postdata}
             </li>
             <li className=" hidden md:flex gap-x-3 items-center text-sm">
-              <CiMail size={20} /> $35k - $45k
+              <CiMail size={20} /> {minsalary}k - {maxsalary}k
             </li>
           </ul>
           <ul className="flex gap-x-5">
             <li className="text-sm rounded-xl px-6 py-1 text-blue-500 bg-blue-100">
-              {item?.job_type || 'Private'}
+              {item?.type || 'Private'}
+            </li>
+            <li className="text-sm rounded-xl px-6 py-1 text-blue-500 bg-blue-100">
+              {item?.experience}
             </li>
           </ul>
         </div>
       </div>
     </div>
-  ))
+      </>
+    )
+  }
+   
+  )
 ) : (
   <p className=" text-center text-sm">No Data Found</p>
 )}
