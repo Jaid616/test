@@ -3,6 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import HeaderCom from "@/components/Header/Header";
 import getData from "@/lib/getData";
+import NextTopLoader from "nextjs-toploader";
+import { Suspense } from "react";
+import Loading from "./loading";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,8 +29,11 @@ export default async function RootLayout  ({
   return (
     <html lang="en">
       <body className={inter.className}>
+      <Suspense fallback ={<Loading/>}>
+        <NextTopLoader color='rgb(29 78 216 )' showSpinner= {false} height={2} shadow={false} />
       <HeaderCom loginStatus={loginStatus}/>
         {children}
+        </Suspense>
         </body>
     </html>
   );
