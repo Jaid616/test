@@ -1,6 +1,6 @@
 export default function Loading() {
-          // You can add any UI inside Loading, including a Skeleton.
-          return <div className="fixed inset-0 bg-blue-500 z-[10000] flex flex-1 items-center justify-center">
-          Loading
-          </div>
+          
+          return <div className="fixed inset-0 bg-[rgba(0, 0, 0, 0.80)] z-[10000] flex flex-1 items-center justify-center">
+          <span className="loader"></span>
+         </div>
         }
