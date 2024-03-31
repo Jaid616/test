@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 
-const useAutoClose = (enableScrollClose: boolean = false) => {
+const useAutoClose = () => {
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [bodyOverflow, setBodyOverflow] = useState('');
   const ref = useRef<HTMLDivElement>(null);
 
+
+  // Handle Auth close when user click outside of the ref
   useEffect(() => {
     const closeMenu = (e: MouseEvent | Event) => {
       if (

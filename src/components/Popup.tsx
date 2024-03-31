@@ -1,10 +1,8 @@
 'use client'
-import useAutoClose from '@/hooks/useAutoClose';
 import usePost from '@/hooks/usePost';
 import createCookies from '@/lib/setCookies';
-import Image from 'next/image'
+import { useLoggedIn } from '@/store/useAuthStore';
 import React, { useState } from 'react'
-import { CiMail } from "react-icons/ci";
 import { IoMdClose } from "react-icons/io";
 
 
@@ -13,6 +11,7 @@ const Popup = ({cref , cclosepop}:{cref:any , cclosepop :any}) => {
 
 
 const [status , setStatus] = useState(false)
+ const {auth , login} =  useLoggedIn()
 
  const {PostMethod , loading} = usePost()
 
@@ -31,7 +30,7 @@ const [regsterData , setregsterData] = useState({
 })
 
 
-
+  // Function to handle Login  Input change
 const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setLoginData(prevState => ({
@@ -40,6 +39,8 @@ const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     }));
 };
 
+
+ // Function to handle Regiter  Input change
 const handleChangeRegister = (e:React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setregsterData(prevState => ({
@@ -48,7 +49,7 @@ const handleChangeRegister = (e:React.ChangeEvent<HTMLInputElement>) => {
     }));
 };
 
-
+ // Function to handle Login  Submiting
 const handleLogin = async(e:any)=> {
     e.preventDefault();
         let response =  await  PostMethod({
@@ -59,6 +60,7 @@ const handleLogin = async(e:any)=> {
        if(response?.status === 200)
        {
          createCookies(response?.data?.data.access , "access_token")
+         login(true)
          cclosepop()
        }
        else{
@@ -66,7 +68,7 @@ const handleLogin = async(e:any)=> {
        }
 }
 
-
+ // Function to handle Register subbmitting
 const handleSignup = async(e:any)=> {
     e.preventDefault();
   let response =  await  PostMethod({
@@ -74,10 +76,11 @@ const handleSignup = async(e:any)=> {
         body: regsterData,
         url : 'user_api/'
      })
-     console.log(response , "response")
-     if(response?.status ===200 )
+     if(response?.status ===201 )
      {
-       
+      createCookies(response?.data?.access , "access_token")
+      login(true)
+      cclosepop()
      }
      else {
       let error =''
@@ -92,7 +95,7 @@ const handleSignup = async(e:any)=> {
      }
 
 
-    //  cclosepop()
+    
 }
 
   return (
@@ -235,7 +238,7 @@ const handleSignup = async(e:any)=> {
             
 
               <div className=' my-5'>
-                <button type='submit' className='w-full py-3 bg-blue-700 text-center text-white rounded-lg'>Register</button>
+                <button type='submit' disabled={loading} className='w-full py-3 disabled:bg-blue-300 bg-blue-700 text-center text-white rounded-lg'>{loading ? "loading.....":"Register"}</button>
               </div>
               <div>
                 <p className=' text-center mb-6 text-xs cursor-pointer' onClick={()=>setStatus(false)}>Already have an account? LogIn</p>
@@ -316,7 +319,7 @@ const handleSignup = async(e:any)=> {
                </div>
  
                <div className=' my-5'>
-                 <button type='submit' disabled={loading} className='w-full py-3 disabled:bg-blue-300 bg-blue-700 text-center text-white rounded-lg'>Login</button>
+                 <button type='submit' disabled={loading} className='w-full py-3 disabled:bg-blue-300 bg-blue-700 text-center text-white rounded-lg'>{loading ? 'loading....':'Login'}</button>
                </div>
                <div>
                  <p className=' text-center mb-6 text-xs cursor-pointer' onClick={()=>setStatus(true)}>Don't have an account? Signup</p>

@@ -1,12 +1,10 @@
 'use client'
 import Image from "next/image";
-import { RxHamburgerMenu } from "react-icons/rx";
+
 import { CiSearch } from "react-icons/ci";
 import { CiMail } from "react-icons/ci";
 import { useEffect, useState } from "react";
 import usePost from "@/hooks/usePost";
-import Popup from "@/components/Popup";
-import useAutoClose from "@/hooks/useAutoClose";
 import moment from "moment";
 import Link from "next/link";
 
@@ -25,39 +23,43 @@ export default function Home() {
   const {PostMethod , loading  } = usePost()
   const [page , setPage] = useState(1)
   const [keyword, setKeyword] = useState('');
-  // const [perPage, setPerPage] = useState(0); 
   const [data, setData] = useState<Data[]>([]);
   const [filteredData, setFilteredData] = useState<Data[]>([]);
   const [filterOption, setFilterOption] = useState('');
 
-   const {closepopup , ref , tooglepopup , showPopup} = useAutoClose()
+  
 
 
    
 
-
+  // Function to get Data
   const getData = async()=> {
     const data:any  =  await  PostMethod({
       method:'get',
         url: `job_api/?page=${page}`})
 
-        setData(prevState => ([...prevState, ...data?.data?.results]));
-        setFilteredData(prevState => ([...prevState, ...data?.data?.results]))
-  }
+       
+        if(data)
+        {     setData(prevState => ([...prevState, ...data?.data?.results]));
+          setFilteredData(prevState => ([...prevState, ...data?.data?.results]))
 
+        }
+  }
     useEffect(()=>{
     
          getData()
 
     },[page])
 
+
+      // Function to handle keyword input
     const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setKeyword(e.target.value);
      
       
     
     };
-
+   // Function to handle filtering based on keyboard
     useEffect(()=>{
       const filtered = data.filter((item:any) => item.title.toLowerCase().includes(keyword.toLowerCase()));
       setFilteredData(filtered);
@@ -70,7 +72,7 @@ export default function Home() {
     // Function to handle filtering based on newest/oldest
     const filterDataByOption = () => {
       const sortedData = [...data];
-       console.log(data , "data", sortedData)
+     
       if (filterOption === 'newest') {
         sortedData.sort((a: any, b: any) => {
           return new Date(b.created).getTime() - new Date(a.created).getTime();
@@ -88,31 +90,11 @@ export default function Home() {
       filterDataByOption()
     },[filterOption])
 
-    //  // Function to handle filtering based on per page
-    //  const perPageFilter = ()=> {
+   
 
-    //   const sortedData = [...data];
-    //   let newdata ;
-    //     if(perPage ===0)
-    //     {
-    //      newdata = sortedData.slice(0,5)
-    //     }
-    //     else {
-    //       newdata = sortedData.slice(0,perPage)
-    //     }
-    
-    
-    //   setFilteredData(newdata);
-    //  }
-
-
-    //  useEffect(()=>{
-    //      perPageFilter()
-    //  },[perPage])
-
-
+  // Function to handle clear filter
      const handleClear = ()=>{
-      // setPerPage(0)
+  
       setKeyword('')
       setFilterOption('')
      }
@@ -120,73 +102,7 @@ export default function Home() {
   return (
       <>
      
-     <div className="flex justify-between items-center px-4 md:px-10 xl:px-20 py-4 md:py-6 lg:py-8">
-  <div className="flex items-center">
-    <div>
-      <a href="/">
-        <h2 className="text-blue-700 text-lg md:text-xl lg:text-2xl">
-          <strong>Learnkoods</strong>
-        </h2>
-      </a>
-    </div>
-    <nav className="hidden xl:flex items-center ml-6">
-      <ul className="flex gap-x-6 items-center">
-        <li>
-          <a href="/">
-            <span className="text-sm">Home</span>
-          </a>
-        </li>
-        <li>
-          
-            <span className="text-sm">Find Jobs</span>
-         
-        </li>
-        <li>
-         
-            <span className="text-sm">Employers</span>
-        
-        </li>
-        <li>
-          
-            <span className="text-sm">Candidates</span>
-     
-        </li>
-        <li>
-         
-            <span className="text-sm">Blog</span>
-         
-        </li>
-        <li>
-         
-            <span className="text-sm">About Us</span>
-      
-        </li>
-      </ul>
-    </nav>
-  </div>
-  <div className=" hidden xl:flex items-center">
-    <div
-      className="text-sm text-blue-500 mr-4 md:mr-6"
-     
-    >
-      Upload your CV
-    </div>
-    <div className="flex items-center">
-      <div className=" text-sm bg-blue-100 text-blue-500 rounded-md px-4 py-2 mr-2 md:mr-4 cursor-pointer" onClick={tooglepopup}>
-        Login / Register
-      </div>
-      <div className="text-sm bg-blue-700 text-white rounded-md px-4 py-2">
-        Job Post
-      </div>
-    </div>
-  </div>
-
-
-  <div className=" flex xl:hidden gap-x-5">
-    <Image src={'/user.svg'} onClick={tooglepopup} height={20} width={20} alt="user" />
-    <RxHamburgerMenu size={25} />
-  </div>
-</div>
+  
 
 
 
@@ -221,7 +137,7 @@ export default function Home() {
           </div>
          </div>
 
-         <div className=" col-span-12 xl:col-span-8 px-5">
+         <div className=" col-span-12 xl:col-span-8 md:px-5">
          <div className="xl:hidden">
             <h4 className=" text-lg font-medium">Search by Keywords</h4>
 
@@ -264,18 +180,17 @@ export default function Home() {
    
 
   {
-    
     let postdata = moment(item?.created, "YYYY-MM-DD").fromNow();
     let maxsalary = Math.floor(item["max salary"]/1000)
     let minsalary = Math.floor(item["min salary"]/1000)
     return (
-      <>
+    
         <div className="my-8 px-4 py-8 rounded-lg border border-blue-100" key={index}>
       <div className="grid grid-cols-12 gap-x-5">
-        <div className=" col-span-2 md:col-span-2 w-[80px] h-[50px] relative">
+        <div className=" col-span-3 md:col-span-2 w-[80px] h-[50px] relative">
           <Image src={`https://learnkoods-task.onrender.com${item?.image}`} fill alt="name" className="object-contain" />
         </div>
-        <div className=" col-span-10">
+        <div className=" col-span-9">
           <Link href={item?.url} target="_blank">
           
           <h4 className="text-sm md:text-lg font-medium">{item?.title}</h4>
@@ -297,17 +212,17 @@ export default function Home() {
             </li>
           </ul>
           <ul className="flex gap-x-5">
-            <li className="text-sm rounded-xl px-6 py-1 text-blue-500 bg-blue-100">
+            <li className="text-xs md:text-sm rounded-xl px-4 md:px-6 py-1  text-blue-500 bg-blue-100">
               {item?.type || 'Private'}
             </li>
-            <li className="text-sm rounded-xl px-6 py-1 text-blue-500 bg-blue-100">
+            <li className=" text-xs md:text-sm rounded-xl px-4 md:px-6 py-1 text-blue-500 bg-blue-100">
               {item?.experience}
             </li>
           </ul>
         </div>
       </div>
     </div>
-      </>
+  
     )
   }
    
@@ -325,7 +240,6 @@ export default function Home() {
 </>:
 <>
 
-{/* <button disabled = {page===1} className="text-center text-blue-400 cursor-pointer" onClick={()=>setPage((pre)=>pre-1)}>Pervious Page</button> */}
 <button className="text-center text-blue-400 cursor-pointer" onClick={()=>setPage((pre)=>pre+1)}>Next Page</button>
 </>}
 </div>
@@ -338,8 +252,7 @@ export default function Home() {
 
     </div>
   </section>
-{showPopup &&
-<Popup cref ={ref} cclosepop = {closepopup}/> }
+
       
       
       </>

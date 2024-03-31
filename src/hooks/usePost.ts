@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosStatic  } from "axios";
 import { useState } from "react";
 
 
-
+// Make a Custom hook for asynchronous actions 
 
 type APIParams = {
     url: string;
@@ -19,15 +19,14 @@ const usePost = () => {
         setLoading(true);
         
         try {
-            // const response = await axios.post(`${`${process.env.NEXT_PUBLIC_BASE_URL}`}${url}`, body);
+           
             const response = await axios({
                 method,
-                url: `${`https://learnkoods-task.onrender.com/`}${url}`,
+                url: `${process.env.NEXT_PUBLIC_BASE_URL}${url}`,
                 data: body && body,
                 headers : headers && headers
             });
 
-            console.log(response , "axios response")
              return response ;
        
         } catch (e) {
